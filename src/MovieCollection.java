@@ -2,6 +2,7 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Scanner;
 
 public class MovieCollection
@@ -81,7 +82,7 @@ public class MovieCollection
 
     private void searchTitles()
     {
-        System.out.print("Enter a tital search term: ");
+        System.out.print("Enter a title search term: ");
         String searchTerm = scanner.nextLine();
 
         // prevent case sensitivity
@@ -98,7 +99,7 @@ public class MovieCollection
 
             if (movieTitle.indexOf(searchTerm) != -1)
             {
-                //add the Movie objest to the results list
+                //add the Movie object to the results list
                 results.add(movies.get(i));
             }
         }
@@ -164,12 +165,86 @@ public class MovieCollection
 
     private void searchCast()
     {
-
+        System.out.println("Enter a cast search term: ");
+        String searchTerm = scanner.nextLine();
+        searchTerm = searchTerm.toLowerCase();
+        ArrayList<String> cast = new ArrayList<String>();
+        ArrayList<String> searchCast = new ArrayList<String>();
+        for(int i=0; i<movies.size();i++){
+            String movieCast = movies.get(i).getCast();
+            movieCast = movieCast.toLowerCase();
+            for (int j=0;j<movieCast.length();j++){
+                int delimiter = movieCast.indexOf("|");
+                if(delimiter==-1){
+                    delimiter=movieCast.length();
+                }
+                String actor = movieCast.substring(0,delimiter);
+                movieCast = movieCast.substring(delimiter);
+                if(!(cast.contains(actor))){
+                    cast.add(actor);
+                }
+            }
+        }
+        for(int i=0; i<cast.size();i++){
+            if(cast.get(i).contains(searchTerm)){
+                searchCast.add(cast.get(i));
+            }
+        }
+        for(int i=0;i<searchCast.size()-1;i++){
+            if(searchCast.get(i))
+        }
     }
 
     private void searchKeywords()
     {
+        System.out.print("Enter a keyword search term: ");
+        String searchTerm = scanner.nextLine();
 
+        // prevent case sensitivity
+        searchTerm = searchTerm.toLowerCase();
+
+        // arraylist to hold search results
+        ArrayList<Movie> results = new ArrayList<Movie>();
+
+        // search through ALL movies in collection
+        for (int i = 0; i < movies.size(); i++)
+        {
+            String movieKeyword = movies.get(i).getKeywords();
+            movieKeyword = movieKeyword.toLowerCase();
+
+            if (movieKeyword.indexOf(searchTerm) != -1)
+            {
+                //add the Movie object to the results list
+                results.add(movies.get(i));
+            }
+        }
+
+        // sort the results by title
+        sortResults(results);
+
+        // now, display them all to the user
+        for (int i = 0; i < results.size(); i++)
+        {
+            String keyword = results.get(i).getKeywords();
+
+            // this will print index 0 as choice 1 in the results list; better for user!
+            int choiceNum = i + 1;
+
+            System.out.println("" + choiceNum + ". " + keyword);
+        }
+
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+
+        Movie selectedMovie = results.get(choice - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
     }
 
     private void listGenres()
