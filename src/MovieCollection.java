@@ -170,6 +170,7 @@ public class MovieCollection
         searchTerm = searchTerm.toLowerCase();
         ArrayList<String> cast = new ArrayList<String>();
         ArrayList<String> searchCast = new ArrayList<String>();
+        ArrayList<Movie> results = new ArrayList<Movie>();
         for(int i=0; i<movies.size();i++){
             String movieCast = movies.get(i).getCast();
             movieCast = movieCast.toLowerCase();
@@ -190,9 +191,40 @@ public class MovieCollection
                 searchCast.add(cast.get(i));
             }
         }
-        for(int i=0;i<searchCast.size()-1;i++){
-            if(searchCast.get(i))
+        searchCast.sort(String::compareTo);
+        for(int i=0;i<searchCast.size();i++){
+            System.out.print(i+1 + ". ");
+            System.out.println(searchCast.get(i));
         }
+        System.out.println("Enter the number of the actor you want to know more about: ");
+        String actorNum = scanner.nextLine();
+        while(Integer.parseInt(actorNum)>searchCast.size() || Integer.parseInt(actorNum)<=0){
+            System.out.println("Enter a number: ");
+            actorNum = scanner.nextLine();
+        }
+        int actorNumAsInt = Integer.parseInt(actorNum);
+        System.out.println((searchCast.get(actorNumAsInt-1))+"'s movies: ");
+        for(Movie movie : movies){
+            String[] movieCast = movie.getCast().split("\\|");
+            for (String name : movieCast)
+            {
+                if(name.equalsIgnoreCase(searchCast.get(actorNumAsInt-1))){
+                    results.add(movie);
+                }
+            }
+        }
+        for(int i=0;i<results.size();i++){
+            String title = results.get(i).getTitle();
+            int choiceNum = i+1;
+            System.out.println(choiceNum + ". " + title);
+        }
+        System.out.println("Choose a movie to learn more about: ");
+        int movieChoice = scanner.nextInt();
+        scanner.nextLine();
+        Movie selected = results.get(movieChoice-1);
+        displayMovieInfo(selected);
+        System.out.println("\nPress enter to return to menu.");
+        scanner.nextLine();
     }
 
     private void searchKeywords()
