@@ -333,50 +333,38 @@ public class MovieCollection {
     private void listHighestRevenue()
     {
         ArrayList<Integer> revenue = new ArrayList<Integer>();
-        for (Movie movie : movies)
-        {
+        for (Movie movie : movies) {
             revenue.add(movie.getRevenue());
         }
         revenue.sort(Integer::compareTo);
         revenue.sort(Collections.reverseOrder());
-
         ArrayList<Movie> top50revenue = new ArrayList<Movie>();
-        for (int i = 0; i < 50; i++)
-        {
-            for (Movie movie : movies)
-            {
-                if (movie.getRevenue() == revenue.get(i))
-                {
-                    if (!top50revenue.contains(movie)) {
+        for (int i = 0; i < 50; i++){
+            for (Movie movie : movies){
+                if (movie.getRevenue() == revenue.get(i)){
+                    if (!top50revenue.contains(movie)){
                         top50revenue.add(movie);
                         break;
                     }
                 }
             }
         }
-
         int i = 0;
-        for (Movie movie: top50revenue)
-        {
+        for (Movie movie: top50revenue){
             i++;
             System.out.println(i + ". " + movie.getTitle());
         }
         System.out.println("Which movie would you like to learn more about?");
         System.out.print("Enter number: ");
-
         int choice = scanner.nextInt();
         scanner.nextLine();
-        while (choice > top50revenue.size() || choice < 1)
-        {
+        while (choice > top50revenue.size() || choice < 1){
             System.out.print("Enter number: ");
             choice = scanner.nextInt();
             scanner.nextLine();
         }
-
         Movie selectedMovie = top50revenue.get(choice - 1);
-
         displayMovieInfo(selectedMovie);
-
         System.out.println("\n ** Press Enter to Return to Main Menu **");
         scanner.nextLine();
     }
