@@ -301,27 +301,84 @@ public class MovieCollection {
         }
         orderedRatings.sort(Double::compareTo);
         Collections.sort(orderedRatings, Collections.reverseOrder());
-        ArrayList<Double> top50Ratings = new ArrayList<Double>();
+        ArrayList<Movie> top50Ratings = new ArrayList<Movie>();
         for(int i=0;i<50;i++){
-            top50Ratings.add(orderedRatings.get(i));
-        }
-        ArrayList<Movie> top50 = new ArrayList<Movie>();
-        for(int i=0;i<movies.size();i++){
-            for(int j=0;j<50;j++){
-                if(movies.get(i).getUserRating() == top50Ratings.get(j)){
-                    top50.add(movies.get(i));
+            for(Movie movie : movies){
+                if(movie.getUserRating() == orderedRatings.get(i)){
+                    if(!top50Ratings.contains(movie)){
+                        top50Ratings.add(movie);
+                        break;
+                    }
                 }
             }
         }
-        System.out.println(top50);
-        /*for (int i=0;i<top50.size();i++){
-            System.out.println(i+1 + ". " + top50.get(i).getTitle() + ": " + top50.get(i).getUserRating());
-        }*/
+        int i = 0;
+        for (Movie movie: top50Ratings)
+        {
+            i++;
+            System.out.println(i + ". " + movie.getTitle());
+        }
+        System.out.println("Pick a movie to learn more about: ");
+        int choice = scanner.nextInt();
+        while (choice>top50Ratings.size() || choice<1){
+            System.out.println("Enter number: ");
+            choice = scanner.nextInt();
+        }
+        Movie selected = top50Ratings.get(choice-1);
+        displayMovieInfo(selected);
+        System.out.println("\n ** Press Enter to return to the main menu **");
+        scanner.nextLine();
     }
 
     private void listHighestRevenue()
     {
+        ArrayList<Integer> revenue = new ArrayList<Integer>();
+        for (Movie movie : movies)
+        {
+            revenue.add(movie.getRevenue());
+        }
+        revenue.sort(Integer::compareTo);
+        revenue.sort(Collections.reverseOrder());
 
+        ArrayList<Movie> top50revenue = new ArrayList<Movie>();
+        for (int i = 0; i < 50; i++)
+        {
+            for (Movie movie : movies)
+            {
+                if (movie.getRevenue() == revenue.get(i))
+                {
+                    if (!top50revenue.contains(movie)) {
+                        top50revenue.add(movie);
+                        break;
+                    }
+                }
+            }
+        }
+
+        int i = 0;
+        for (Movie movie: top50revenue)
+        {
+            i++;
+            System.out.println(i + ". " + movie.getTitle());
+        }
+        System.out.println("Which movie would you like to learn more about?");
+        System.out.print("Enter number: ");
+
+        int choice = scanner.nextInt();
+        scanner.nextLine();
+        while (choice > top50revenue.size() || choice < 1)
+        {
+            System.out.print("Enter number: ");
+            choice = scanner.nextInt();
+            scanner.nextLine();
+        }
+
+        Movie selectedMovie = top50revenue.get(choice - 1);
+
+        displayMovieInfo(selectedMovie);
+
+        System.out.println("\n ** Press Enter to Return to Main Menu **");
+        scanner.nextLine();
     }
 
     private void importMovieList(String fileName)
